@@ -1,5 +1,4 @@
 import logging
-
 from collections import defaultdict
 
 class TelegramHandler(logging.Handler):

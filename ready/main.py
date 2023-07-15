@@ -9,7 +9,6 @@ from replit import Database
 
 from register import ADriver
 from tglogs import TelegramHandler, ATelegramLogger
-
 from helpers import exc_to_str
 
 app = Flask(__name__)
