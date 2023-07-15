@@ -5,7 +5,7 @@ from flask import Flask, request
 from telebot import TeleBot
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from replit import Database
+# from replit import Database
 
 from register import ADriver
 from tglogs import TelegramHandler, ATelegramLogger
@@ -52,7 +52,7 @@ def act_main(
 if __name__ == '__main__':
 
     bot = TeleBot(os.environ['TG_BOT_TOKEN'])
-    db = Database(os.environ['REPLIT_DB_URL'])
+    # db = Database(os.environ['REPLIT_DB_URL'])
     config_link = os.environ['CONFIG_LINK'] % os.environ['ACONFIG']
 
     bot.parse_mode = 'html'
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         service = Service(executable_path=r'app/drivers/chromedriver_112.0.5615.49.exe')
 
         options = Options()
-        for option in db['options_list']:
+        for option in os.environ['options_list'].split(' '):
             options.add_argument(option)
         options.add_extension(r'app/Chrome/extensions/noCaptchaAi-chrome-v1.1.crx')
         options.binary_location = r'app/Chrome/chrome.exe'
