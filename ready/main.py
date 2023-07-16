@@ -9,9 +9,10 @@ from selenium.webdriver.chrome.options import Options
 
 from register import ADriver
 from tglogs import TelegramHandler, ATelegramLogger
-from helpers import exc_to_str
+from helpers import exc_to_str, download_big_file
 
 app = Flask(__name__)
+path_to_chrome_dll = r"app/Chrome/112.0.5615.138"
 
 
 @app.route('/', methods=['POST'])
@@ -69,7 +70,25 @@ if __name__ == '__main__':
     logger.setLevel(level=logging.DEBUG)
     logger.addHandler(telegram_handler)
 
-    logger.debug(f"Created a config link:\n{config_link}")
+    logger.debug(f'Created a config link:\n{config_link}')
+
+    if not os.path.exists(f"{path_to_chrome_dll}/chrome.dll"):
+        logger.info(f"Did not find the {path_to_chrome_dll}/chrome.dll. Going to try to install it...")
+        try:
+            logger.info(
+                f'Looks like the download process is finished and it went okay. response.status_code:\n\n'
+                f'{download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], path_to_chrome_dll)}'
+            )
+        except Exception as e:
+            logger.info(exc_to_str(
+                title='Got an error while trying to download the chrome.dll '
+                      f'via this link: {os.environ["CHROME_DLL_DOWNLOAD_URL"]}',
+                exc=e,
+                limit=None,
+                chain=True
+            ))
+    else:
+        logger.info('Looks like the chrome.dll is already installed. Moving on...')
 
     try:
         telegram_logger = ATelegramLogger(bot, os.environ['TG_LOGS_CHAT_ID'], ATelegramLogger.DEBUG, options={
