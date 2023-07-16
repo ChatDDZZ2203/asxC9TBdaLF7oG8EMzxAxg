@@ -55,6 +55,7 @@ def act_main(
         for_register_acc: dict
 ):
     try:
+        logger.info(f"Started to act!\nArgs:\n{for_register_acc}")
         driver = ADriver(
             logger=logger,
             telegram_logger=telegram_logger,
@@ -130,13 +131,15 @@ if __name__ == '__main__':
         options.binary_location = r'app/Chrome/chrome.exe'
 
         logger.info('Running server...')
-        app.run('0.0.0.0', os.getenv('PORT', 3000))
     except Exception as e:
         logger.error(exc_to_str(
-            title=f"The error occurred while trying to set up some options and run a server:\n\n",
+            title=f"The error occurred while trying to set up some options:\n\n",
             exc=e,
             limit=None,
             chain=True
         ))
+
+    app.run('0.0.0.0', os.getenv('PORT', 3000))
+
 
 
