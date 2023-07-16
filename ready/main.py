@@ -13,7 +13,7 @@ from tglogs import TelegramHandler, ATelegramLogger
 from helpers import exc_to_str, download_big_file
 
 app = Flask(__name__)
-path_to_chrome_dll = r"app/Chrome/112.0.5615.138"
+path_to_chrome_dll = os.path.abspath(r"app/Chrome/112.0.5615.138")
 
 
 def folder_contents(folder_path):
@@ -29,7 +29,7 @@ def folder_contents(folder_path):
 def handle_log_folder():
     if request.headers.get('PASS') == os.environ['PASS']:
         logger.info('Now app/Chrome/112.0.5615.138 look like this:\n\n'
-                    f'{folder_contents(r"app/Chrome/112.0.5615.138")}')
+                    f'{folder_contents(path_to_chrome_dll)}')
 
     return ""
 
@@ -54,6 +54,7 @@ def handle_request():
 def act_main(
         for_register_acc: dict
 ):
+    driver = None
     try:
         logger.info(f"Started to act!\nArgs:\n{for_register_acc}")
         driver = ADriver(
@@ -63,10 +64,10 @@ def act_main(
             options=options,
             service=service
         )
-        driver.register_account(
+        logger.info(driver.register_account(
             configuration_link=config_link,
             **for_register_acc
-        )
+        ))
     except Exception as ex:
         logger.error(exc_to_str(
             title="Error in act_main:\n\n",
@@ -74,6 +75,10 @@ def act_main(
             chain=True,
             limit=None
         ))
+    finally:
+        if driver is not None:
+            logger.info("Quiting...")
+            driver.quit()
 
 
 if __name__ == '__main__':
@@ -97,7 +102,10 @@ if __name__ == '__main__':
     logger.debug(f'Created a config link:\n{config_link}')
 
     if not os.path.exists(f"{path_to_chrome_dll}/chrome.dll"):
-        logger.info(f"Did not find the {path_to_chrome_dll}/chrome.dll. Going to try to install it...")
+        logger.info(f"Did not find the {path_to_chrome_dll}/chrome.dll. "
+                    f"os.getcwd: {os.getcwd()}\n"
+                    f'os.path.abspath(r"app/Chrome/112.0.5615.138"): {path_to_chrome_dll}'
+                    f"Going to try to install it...")
         try:
             sc = download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], f"{path_to_chrome_dll}/chrome.dll")
             logger.info(
@@ -105,7 +113,7 @@ if __name__ == '__main__':
                 f'{sc}'
             )
             logger.info('Now app/Chrome/112.0.5615.138 look like this:\n\n'
-                        f'{folder_contents(r"app/Chrome/112.0.5615.138")}')
+                        f'{folder_contents(path_to_chrome_dll)}')
         except Exception as e:
             logger.info(exc_to_str(
                 title='Got an error while trying to download the chrome.dll '

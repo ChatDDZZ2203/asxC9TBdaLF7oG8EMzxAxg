@@ -19,7 +19,10 @@ def exc_to_str(
 
 
 def random_sleep(min_secs: float, max_secs: float):
-    """Takes min and max values in seconds"""
+    """
+    Takes min and max values in seconds
+    and sleeps for a random (float) value between these values
+    """
     time.sleep(random.uniform(min_secs, max_secs))
 
 
