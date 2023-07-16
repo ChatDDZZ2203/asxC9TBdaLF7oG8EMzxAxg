@@ -13,6 +13,7 @@ from helpers import exc_to_str
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['POST'])
 def handle_request():
     if request.headers.get('PASS') == os.environ['PASS']:
