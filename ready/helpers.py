@@ -14,7 +14,7 @@ def exc_to_str(
             type(exc), exc, exc.__traceback__,
             limit=limit, chain=chain
         ))
-    return title + (string_representation.replace('<', '^').replace('>', '^') if for_tg else string_representation)
+    return title + (string_representation.replace('<', '').replace('>', '') if for_tg else string_representation)
 
 
 def random_sleep(min_secs: float, max_secs: float):
