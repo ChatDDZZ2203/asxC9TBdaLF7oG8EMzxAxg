@@ -15,6 +15,24 @@ app = Flask(__name__)
 path_to_chrome_dll = r"app/Chrome/112.0.5615.138"
 
 
+def folder_contents(folder_path):
+    return '\n'.join(
+        f"File: {item}"
+        if os.path.isfile((item_path := os.path.join(folder_path, item)))
+        else f"Folder: {item}" if os.path.isdir(item_path) else f"Unknown: {item}"
+        for item in os.listdir(folder_path)
+    )
+
+
+@app.route('/log_folder', methods=['POST'])
+def handle_log_folder():
+    if request.headers.get('PASS') == os.environ['PASS']:
+        logger.info('Now app/Chrome/112.0.5615.138 look like this:\n\n'
+                    f'{folder_contents(r"app/Chrome/112.0.5615.138")}')
+
+    return ""
+
+
 @app.route('/', methods=['POST'])
 def handle_request():
     if request.headers.get('PASS') == os.environ['PASS']:
@@ -75,10 +93,13 @@ if __name__ == '__main__':
     if not os.path.exists(f"{path_to_chrome_dll}/chrome.dll"):
         logger.info(f"Did not find the {path_to_chrome_dll}/chrome.dll. Going to try to install it...")
         try:
+            sc = download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], f"{path_to_chrome_dll}/chrome.dll")
             logger.info(
-                f'Looks like the download process is finished and it went okay. response.status_code:\n\n'
-                f'{download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], f"{path_to_chrome_dll}/chrome.dll")}'
+                f'Looks like the download process is finished and went okay. response.status_code:\n\n'
+                f'{sc}'
             )
+            logger.info('Now app/Chrome/112.0.5615.138 look like this:\n\n'
+                        f'{folder_contents(r"app/Chrome/112.0.5615.138")}')
         except Exception as e:
             logger.info(exc_to_str(
                 title='Got an error while trying to download the chrome.dll '
