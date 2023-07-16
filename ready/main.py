@@ -77,7 +77,7 @@ if __name__ == '__main__':
         try:
             logger.info(
                 f'Looks like the download process is finished and it went okay. response.status_code:\n\n'
-                f'{download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], path_to_chrome_dll)}'
+                f'{download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], f"{path_to_chrome_dll}/chrome.dll")}'
             )
         except Exception as e:
             logger.info(exc_to_str(
