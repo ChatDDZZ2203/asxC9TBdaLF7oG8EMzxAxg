@@ -38,7 +38,7 @@ def handle_log_folder():
 def handle_request():
     if request.headers.get('PASS') == os.environ['PASS']:
         arguments = dict()
-        for required_arg in ['email', 'password', 'fullName']:
+        for required_arg in ['email', 'password', 'fullname']:
             if (arg := request.headers.get(required_arg)) is None:
                 return f"Invalid args. Did not find {required_arg} in your request headers"
             arguments[required_arg] = arg
@@ -101,16 +101,14 @@ if __name__ == '__main__':
 
     logger.debug(f'Created a config link:\n{config_link}')
 
-    if not os.path.exists(f"{path_to_chrome_dll}/chrome.dll"):
+    if not os.path.isfile(f"{path_to_chrome_dll}/chrome.dll"):
         logger.info(f"Did not find the {path_to_chrome_dll}/chrome.dll. "
                     f"os.getcwd: {os.getcwd()}\n"
-                    f'os.path.abspath(r"app/Chrome/112.0.5615.138"): {path_to_chrome_dll}'
                     f"Going to try to install it...")
         try:
-            sc = download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], f"{path_to_chrome_dll}/chrome.dll")
             logger.info(
                 f'Looks like the download process is finished and went okay. response.status_code:\n\n'
-                f'{sc}'
+                f'{download_big_file(os.environ["CHROME_DLL_DOWNLOAD_URL"], f"{path_to_chrome_dll}/chrome.dll")}'
             )
             logger.info('Now app/Chrome/112.0.5615.138 look like this:\n\n'
                         f'{folder_contents(path_to_chrome_dll)}')

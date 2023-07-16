@@ -83,7 +83,7 @@ class ADriver(Chrome):
             actions.reset_actions()
             random_sleep(max([0.01, 0.23 - i / 100]), max([0.02, 0.5 - i / 100]))
 
-    def register_account(self, email: str, password: str, full_name: str, configuration_link: str):
+    def register_account(self, email: str, password: str, fullname: str, configuration_link: str):
         try:
             time.sleep(1)
             self.get(configuration_link)
@@ -111,7 +111,7 @@ class ADriver(Chrome):
             self.find_element(By.XPATH, '//*[@id="signinSrConfirmPassword"]').send_keys(password)
 
             random_sleep(1.5, 3)
-            self.find_element(By.XPATH, '//*[@id="signinSrName"]').send_keys(full_name)
+            self.find_element(By.XPATH, '//*[@id="signinSrName"]').send_keys(fullname)
 
             random_sleep(1, 3.5)
             Select(self.find_element(By.CSS_SELECTOR, 'select#country')).select_by_value('US')
@@ -141,7 +141,7 @@ class ADriver(Chrome):
                     )
                 ).click()
                 return f"Finished registering with these credentials::\n\nemail: {email}\n" \
-                       f"password: {password}\nfull_name: {full_name}"
+                       f"password: {password}\nfull_name: {fullname}"
 
             except Exception as e:
                 return exc_to_str(
