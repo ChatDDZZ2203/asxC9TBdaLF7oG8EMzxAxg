@@ -18,7 +18,7 @@ app = Flask(__name__)
 def handle_request():
     if request.headers.get('PASS') == os.environ['PASS']:
         arguments = dict()
-        for required_arg in ['email', 'password', 'full_name']:
+        for required_arg in ['email', 'password', 'fullName']:
             if (arg := request.headers.get(required_arg)) is None:
                 return f"Invalid args. Did not find {required_arg} in your request headers"
             arguments[required_arg] = arg
