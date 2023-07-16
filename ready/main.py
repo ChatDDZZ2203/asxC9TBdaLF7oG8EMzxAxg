@@ -56,8 +56,6 @@ if __name__ == '__main__':
     # db = Database(os.environ['REPLIT_DB_URL'])
     config_link = os.environ['CONFIG_LINK'] % os.environ['ACONFIG']
 
-    bot.parse_mode = 'markdown'
-
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s :\n%(message)s", '%Y-%m-%d %H:%M:%S')
     telegram_handler = TelegramHandler(bot, os.environ['TG_LOGS_CHAT_ID'], options={
         'reply_to_message_id': os.environ['TG_TOPIC_ID']
