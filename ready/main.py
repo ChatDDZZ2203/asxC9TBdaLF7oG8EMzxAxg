@@ -1,5 +1,6 @@
 import logging
 import os
+from threading import Thread
 
 from flask import Flask, request
 from telebot import TeleBot
@@ -41,7 +42,11 @@ def handle_request():
             if (arg := request.headers.get(required_arg)) is None:
                 return f"Invalid args. Did not find {required_arg} in your request headers"
             arguments[required_arg] = arg
-        return act_main(arguments)
+        thread = Thread(
+            target=act_main, args=(arguments,)
+        )
+        thread.start()
+        return f"Started a new thread to resolve your request: {thread}"
 
     return ""
 
