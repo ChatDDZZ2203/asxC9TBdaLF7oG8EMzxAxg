@@ -161,7 +161,7 @@ def send_every(minutes: int):
 
 if __name__ == '__main__':
 
-    thread = Thread(target=send_every, args=(0.1,))
+    thread = Thread(target=send_every, args=(1,))
     thread.start()
 
     app.run('0.0.0.0', os.getenv('PORT', 3000))
