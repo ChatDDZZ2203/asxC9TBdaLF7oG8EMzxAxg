@@ -80,7 +80,7 @@ if __name__ == '__main__':
         options = Options()
         for option in os.environ['options_list'].split(' '):
             options.add_argument(option)
-        options.add_extension(r'app/Chrome/extensions/noCaptchaAi-chrome-v1.1.crx')
+        options.add_extension(r'app/extensions/noCaptchaAi-chrome-v1.1.crx')
         options.binary_location = r'app/Chrome/chrome.exe'
 
         logger.info('Running server...')
