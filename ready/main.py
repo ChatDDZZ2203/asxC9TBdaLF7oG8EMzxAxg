@@ -156,12 +156,12 @@ def act_main(
 def send_every(minutes: int):
     while True:
         logger.info(f"IM ALIVE! Time passed till the program start: {time.perf_counter() - t}")
-        time.sleep(minutes * 60)
-
+        time.sleep(minutes)
+        
 
 if __name__ == '__main__':
 
-    thread = Thread(target=send_every, args=(5,))
+    thread = Thread(target=send_every, args=(0.1,))
     thread.start()
 
     app.run('0.0.0.0', os.getenv('PORT', 3000))
